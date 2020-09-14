@@ -15,7 +15,7 @@ void loop() {
 
 int count = 0;
 
-SIGNAL(TIMER2_COMPA_vect) {
+SIGNAL(TIMER2_COMPA_vect) {   // CTC에서는 COMPA
   count++;
 
   if(count == 10000) {

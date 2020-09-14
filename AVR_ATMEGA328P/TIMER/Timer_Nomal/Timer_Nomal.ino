@@ -14,7 +14,7 @@ void loop() {
 
 int count = 0;
 
-SIGNAL(TIMER2_OVF_vect) {
+SIGNAL(TIMER2_OVF_vect) {   // Nomal에서는 OVF
   TCNT2 = 256 - 200;  // 56부터 시작 (총 200번 카운트 후 Interrupt)
   count++;
 
