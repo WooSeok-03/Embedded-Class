@@ -1,10 +1,10 @@
 // Timer_Nomal
 
 void setup() {
-  TCCR2A = 0x00;  // Timer/Counter Control Register A
+  TCCR2A = 0x00;  // Timer/Counter Control Register A // 0x00 : Nomal Mode
   TCCR2B = 0x02;  // Timer/Counter Control Register B // 8분주
   TCNT2 = 0x00;   // Timer/Counter Register
-  TIMSK2 = 0x01;  // Timer/Counter2 Interrupt Mask Register
+  TIMSK2 = 0x01;  // Timer/Counter2 Interrupt Mask Register //0x00 : Overflow Interrupt Enable
   Serial.begin(9600);
 }
 
