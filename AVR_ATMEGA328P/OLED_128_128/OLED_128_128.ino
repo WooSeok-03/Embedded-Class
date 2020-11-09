@@ -1,3 +1,6 @@
+#include "tiger_128_128_16bit.h"
+#include "tiger_128_96_16bit.h"
+
 #define OLED_CS   4
 #define OLED_RST  3
 #define OLED_DC   5
@@ -15,6 +18,12 @@ void setup() {
 
   oled_init();
   clear_screen();
+
+  draw_bitmap();
+
+  for(int j = 0; j < 10; j++)
+    for(int i = 0; i < 128; i++)
+      put_pixel(i, j, 0x001f);  // Color : BLUE
 }
 
 void loop() {
@@ -135,9 +144,63 @@ void clear_screen()
   {
     for(int i = 0; i < 128; i++)
     {
-      Write_Data(0xF8);
-      Write_Data(0x00);
+      //Write_Data(0xF8); //RED
+      //White
+      Write_Data(0xFF);
+      Write_Data(0xFF);
     }
   }
   
+}
+
+void put_pixel(char x, char y, unsigned short color)
+{
+  char first_byte = (color & 0xff00) >> 8;
+  char second_byte = color & 0xff;
+  
+  //Column
+  Write_Command(0x15);
+  Write_Data(x); 
+  Write_Data(x);
+
+  //Row
+  Write_Command(0x75);
+  Write_Data(y);
+  Write_Data(y);
+
+  Write_Command(0x5c);
+
+  Write_Data(first_byte);
+  Write_Data(second_byte);
+}
+
+void draw_bitmap()
+{
+  Write_Command(0x15);
+  Write_Data(0x00);
+  //Write_Data(127); 
+  Write_Data(0x7f);
+
+  Write_Command(0x75);
+  Write_Data(0x00);
+  //Write_Data(96);
+  Write_Data(0x7f);
+
+  Write_Command(0x5c);
+
+  //for(int j = 0; j < 96; j++)
+  for(int j = 0; j < 128; j++)
+  {
+    for(int i = 0; i < 128; i++)
+    {
+      // pgm_byte 에는 포인터만 들어가기 때문에 &를 붙여줌.
+      // 128x128
+      Write_Data(pgm_read_byte(&tiger_128_128_16bit[ 1 + i*2 + j*128*2]));
+      Write_Data(pgm_read_byte(&tiger_128_128_16bit[ i*2 + j*128*2]));
+
+      //128x96
+      //Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + 1 + i*2 + j*128*2]));
+      //Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + i*2 j*128*2]));
+    }
+  }
 }
