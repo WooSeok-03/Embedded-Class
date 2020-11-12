@@ -78,10 +78,10 @@ void loop() {
   //delay(1000);
 
   // L자 블럭 떨어뜨리기
-  delete_block(x,y);
-  y+=6;
-  make_block(x,y);
-  delay(1000);
+  //delete_block(x,y);
+  //y+=6;
+  //make_block(x,y);
+  //delay(1000);
 }
 
 // SPCR : SPI Control Register
@@ -380,6 +380,17 @@ void make_block(char x, char y)
     for(int i = 0; i < 4; i++)
     {
       if(block_L[j][i] == 1) make_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
+    }
+  }
+}
+
+void delete_block(char x, char y)
+{
+  for(int j = 0; j < 4; j++)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      if(block_L[j][i] == 1) delete_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
     }
   }
 }
