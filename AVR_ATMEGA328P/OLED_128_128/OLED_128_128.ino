@@ -49,15 +49,17 @@ void setup() {
   //    put_pixel(i, j, 0x001f);  // Color : BLUE
 
   //font_write(100, 100, 0x001f, '2');
-  string_write(10, 100, 0x001f, "Hello");
+  //string_write(10, 100, 0x001f, "Hello");
+
+  make_rect(10, 10);
 }
 
 void loop() {
   // 숫자 2, 3 반복
-  draw_num_30_30(50, 50, 2);
-  delay(1000);
-  draw_num_30_30(50, 50, 3);
-  delay(1000);
+  //draw_num_30_30(50, 50, 2);
+  //delay(1000);
+  //draw_num_30_30(50, 50, 3);
+  //delay(1000);
 
 }
 
@@ -307,5 +309,16 @@ void string_write(char x, char y, unsigned short color, char *str)
   for(int i = 0; i < str_len; i++)
   {
     font_write(x + (i * 10), y, color, *(str + i));
+  }
+}
+
+void make_rect(char x, char y)
+{
+  for(int j = 0; j < 5; j++)
+  {
+    for(int i = 0; i < 5; i++)
+    {
+      put_pixel(x + i, y + j, RED);
+    }
   }
 }
