@@ -79,6 +79,10 @@ void loop() {
 
 }
 
+// SPCR : SPI Control Register
+// SPSR : SPI Status Register
+// SPDR : SPI Data Register
+
 void spi_init()
 {
   SPCR = 0x50;
