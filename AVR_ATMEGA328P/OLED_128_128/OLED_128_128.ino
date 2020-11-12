@@ -4,8 +4,14 @@
 #define OLED_CS   4
 #define OLED_RST  3
 #define OLED_DC   5
-#define OLED_SCK  13
-#define OLED_DATA  11
+
+// Uno
+//#define OLED_SCK  13
+//#define OLED_DATA 11
+
+//Mega
+#define OLED_SCK  52
+#define OLED_DATA 51
 
 void setup() {
   pinMode(OLED_RST, OUTPUT);
@@ -19,11 +25,14 @@ void setup() {
   oled_init();
   clear_screen();
 
-  draw_bitmap();
+  
+  //draw_bitmap();
 
-  for(int j = 0; j < 10; j++)
-    for(int i = 0; i < 128; i++)
-      put_pixel(i, j, 0x001f);  // Color : BLUE
+  //for(int j = 0; j < 10; j++)
+  //  for(int i = 0; i < 128; i++)
+  //    put_pixel(i, j, 0x001f);  // Color : BLUE
+
+  font_write(100, 100, 0x001f, '2');
 }
 
 void loop() {
@@ -201,6 +210,20 @@ void draw_bitmap()
       //128x96
       //Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + 1 + i*2 + j*128*2]));
       //Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + i*2 j*128*2]));
+    }
+  }
+}
+
+void font_write(char x, char y, unsigned short color, char font)
+{
+  for(int j = 0; j < 16; j++)
+  {
+    for(int i = 0; i < 8; i++)
+    {
+      if(ascii_8x16[font - 0x20][j] & (0x80 >> i))
+      {
+        put_pixel(x + i, y + j, color);
+      }
     }
   }
 }
