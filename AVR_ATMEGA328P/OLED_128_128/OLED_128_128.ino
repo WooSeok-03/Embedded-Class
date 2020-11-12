@@ -53,7 +53,11 @@ void setup() {
 }
 
 void loop() {
-  
+  // 숫자 2, 3 반복
+  draw_num_30_30(50, 50, 2);
+  delay(1000);
+  draw_num_30_30(50, 50, 3);
+  delay(1000);
 
 }
 
