@@ -14,6 +14,9 @@
 #define OLED_DATA 51
 
 void setup() {
+  //pinMode(10, OUTPUT); // Uno
+  pinMode(53, OUTPUT); // Mega
+  
   pinMode(OLED_RST, OUTPUT);
   pinMode(OLED_CS, OUTPUT);
   pinMode(OLED_DC, OUTPUT);
@@ -21,6 +24,8 @@ void setup() {
   pinMode(OLED_DATA, OUTPUT);
 
   digitalWrite(OLED_SCK, LOW);
+
+  spi_init();
 
   oled_init();
   clear_screen();
@@ -39,6 +44,18 @@ void setup() {
 void loop() {
   
 
+}
+
+void spi_init()
+{
+  SPCR = 0x50;
+  SPSR = 0x01;
+}
+
+void spi_write(char data)
+{
+  SPDR = data;
+  while(!(SPSR & 0x80)); 
 }
 
 void shift_out(char data)
