@@ -27,6 +27,12 @@
 int x = 1;
 int y = 1;
 
+char block_L[4][4] = { {0,0,0,0},
+                       {0,1,0,0},
+                       {0,1,1,1},
+                       {0,0,0,0}
+};
+
 void setup() {
   //pinMode(10, OUTPUT); // Uno
   pinMode(53, OUTPUT); // Mega
@@ -55,6 +61,7 @@ void setup() {
   //string_write(10, 100, 0x001f, "Hello");
 
   make_rect(10, 10);
+  make_block(10, 10);
 }
 
 void loop() {
@@ -65,10 +72,10 @@ void loop() {
   //delay(1000);
 
   // 블럭 1개 떨어뜨리기
-  delete_rect(x, y);
-  y+=6;
-  make_rect(x, y);
-  delay(1000);
+  //delete_rect(x, y);
+  //y+=6;
+  //make_rect(x, y);
+  //delay(1000);
 
 }
 
@@ -339,6 +346,17 @@ void delete_rect(char x, char y)
     for(int i = 0; i < 5; i++)
     {
       put_pixel(x + i, y + j, WHITE);
+    }
+  }
+}
+
+void make_block(char x, char y)
+{
+  for(int j = 0; j < 4; j++)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      if(block_L[j][i] == 1) make_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
     }
   }
 }
