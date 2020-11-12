@@ -32,7 +32,8 @@ void setup() {
   //  for(int i = 0; i < 128; i++)
   //    put_pixel(i, j, 0x001f);  // Color : BLUE
 
-  font_write(100, 100, 0x001f, '2');
+  //font_write(100, 100, 0x001f, '2');
+  string_write(10, 100, 0x001f, "Hello");
 }
 
 void loop() {
@@ -225,5 +226,16 @@ void font_write(char x, char y, unsigned short color, char font)
         put_pixel(x + i, y + j, color);
       }
     }
+  }
+}
+
+void string_write(char x, char y, unsigned short color, char *str)
+{
+  char font;
+  int str_len = strlen(str);
+  
+  for(int i = 0; i < str_len; i++)
+  {
+    font_write(x + (i * 10), y, color, *(str + i));
   }
 }
