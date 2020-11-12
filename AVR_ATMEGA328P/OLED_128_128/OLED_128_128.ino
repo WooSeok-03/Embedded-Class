@@ -48,7 +48,7 @@ void setup() {
   spi_init();
 
   oled_init();
-  clear_screen();
+  clear_screen(WHITE);
 
   
   //draw_bitmap();
@@ -60,7 +60,7 @@ void setup() {
   //font_write(100, 100, 0x001f, '2');
   //string_write(10, 100, 0x001f, "Hello");
 
-  make_rect(10, 10);
+  //make_rect(10, 10);
   make_block(10, 10);
 }
 
@@ -77,6 +77,11 @@ void loop() {
   //make_rect(x, y);
   //delay(1000);
 
+  // L자 블럭 떨어뜨리기
+  delete_block(x,y);
+  y+=6;
+  make_block(x,y);
+  delay(1000);
 }
 
 // SPCR : SPI Control Register
