@@ -24,6 +24,9 @@
 #define BLACK  0x0000
 #define YELLOW 0xffe0
 
+int x = 1;
+int y = 1;
+
 void setup() {
   //pinMode(10, OUTPUT); // Uno
   pinMode(53, OUTPUT); // Mega
@@ -60,6 +63,12 @@ void loop() {
   //delay(1000);
   //draw_num_30_30(50, 50, 3);
   //delay(1000);
+
+   블럭 1개 떨어뜨리기
+  delete_rect(x, y);
+  y+=6;
+  make_rect(x, y);
+  delay(1000);
 
 }
 
@@ -319,6 +328,17 @@ void make_rect(char x, char y)
     for(int i = 0; i < 5; i++)
     {
       put_pixel(x + i, y + j, RED);
+    }
+  }
+}
+
+void delete_rect(char x, char y)
+{
+  for(int j = 0; j < 5; j++)
+  {
+    for(int i = 0; i < 5; i++)
+    {
+      put_pixel(x + i, y + j, WHITE);
     }
   }
 }
