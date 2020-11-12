@@ -5,6 +5,7 @@
 #include "num3_16bit.h"
 #include "font.h"
 
+
 #define OLED_CS   4
 #define OLED_RST  3
 #define OLED_DC   5
@@ -33,6 +34,9 @@ char block_L[4][4] = { {0,0,0,0},
                        {0,0,0,0}
 };
 
+char pixel_offset_x = 1;
+char pixel_offset_y = 1;
+
 void setup() {
   //pinMode(10, OUTPUT); // Uno
   pinMode(53, OUTPUT); // Mega
@@ -45,21 +49,24 @@ void setup() {
 
   digitalWrite(OLED_SCK, LOW);
 
-  spi_init();
+  Serial.begin(9600);
 
+  spi_init();
   oled_init();
+  
   clear_screen(WHITE);
 
+  /*
+  draw_bitmap();
+
+  for(int j = 0; j < 10; j++)
+    for(int i = 0; i < 128; i++)
+      put_pixel(i, j, 0x001f);  // Color : BLUE
+
+  font_write(100, 100, 0x001f, '2');
+  string_write(10, 100, 0x001f, "Hello");
+  */
   
-  //draw_bitmap();
-
-  //for(int j = 0; j < 10; j++)
-  //  for(int i = 0; i < 128; i++)
-  //    put_pixel(i, j, 0x001f);  // Color : BLUE
-
-  //font_write(100, 100, 0x001f, '2');
-  //string_write(10, 100, 0x001f, "Hello");
-
   //make_rect(10, 10);
   //make_block(10, 10);
 
@@ -73,6 +80,9 @@ void setup() {
     draw_line_vert(0, 121, i * 6, color_value(200, 200, 200));
   }
 }
+
+int count = 0;
+char key;
 
 void loop() {
   // 숫자 2, 3 반복
@@ -92,6 +102,47 @@ void loop() {
   //y+=6;
   //make_block(x,y);
   //delay(1000);
+
+  if(count == 20)
+  {
+    count = 0;
+
+    delete_block(x,y);
+    y++;
+    make_block(x,y);
+  }
+
+  if(Serial.available())
+  {
+    key = Serial.read();
+    if(key == 'a')
+    {
+      delete_block(x,y);
+      x--;
+      make_block(x,y);
+    }
+    else if(key == 'd')
+    {
+      delete_block(x,y);
+      x++;
+      make_block(x,y);
+    }
+    else if(key == 'w')
+    {
+      delete_block(x,y);
+      y--;
+      make_block(x,y);
+    }
+    else if(key == 's')
+    {
+      delete_block(x,y);
+      y++;
+      make_block(x,y);
+    }
+  }
+
+  count++;
+  delay(50);
 }
 
 // SPCR : SPI Control Register
@@ -133,7 +184,8 @@ void Write_Command(char command)
   digitalWrite(OLED_CS, LOW);   // CS LOW
   digitalWrite(OLED_DC, LOW);   // DC LOW
 
-  shift_out(command);
+  //shift_out(command);
+  spi_write(command);
   
   digitalWrite(OLED_CS, HIGH);  // CS HIGH
   digitalWrite(OLED_DC, HIGH);  // DC HIGH
@@ -143,7 +195,8 @@ void Write_Command(char command)
 void Write_Data(char data)
 {
   digitalWrite(OLED_CS, LOW);   // CS LOW
-  shift_out(data);
+  //shift_out(data);
+  spi_write(data);
   digitalWrite(OLED_CS, HIGH);  // CS HIGH
 }
 
@@ -234,6 +287,18 @@ void clear_screen(unsigned short color)
   
 }
 
+unsigned short color_value(char r, char g, char b)
+{
+  char first_byte = 0;
+  char second_byte = 0;
+  
+  first_byte |= (r & 0xf8) << 3;
+  first_byte |= (g & 0x70) >> 5;
+  second_byte |= ((g & 0x1c) >> 2) << 5;
+  second_byte |= (b & 0xf8) >> 3;
+  return ((first_byte << 8) + second_byte);
+}
+
 void put_pixel(char x, char y, unsigned short color)
 {
   char first_byte = (color & 0xff00) >> 8;
@@ -253,18 +318,6 @@ void put_pixel(char x, char y, unsigned short color)
 
   Write_Data(first_byte);
   Write_Data(second_byte);
-}
-
-unsigned short color_value(char r, char g, char b)
-{
-  char first_byte = 0;
-  char second_byte = 0;
-  
-  first_byte |= (r & 0xf8) << 3;
-  first_byte |= (g & 0x70) >> 5;
-  second_byte |= ((g & 0x1c) >> 2) << 5;
-  second_byte |= (b & 0xf8) >> 3;
-  return ((first_byte << 8) + second_byte);
 }
 
 void draw_num_30_30(char x, char y, char number)
