@@ -188,8 +188,10 @@ void oled_init()
   Write_Command(0xAF);  
 }
 
-void clear_screen()
+void clear_screen(unsigned short color)
 {
+  char first_byte = (color & 0xff) >> 8;
+  char second_byte = color & 0xff;
   Write_Command(0x15);
   Write_Data(0x00);
   Write_Data(0x7f);
@@ -232,6 +234,18 @@ void put_pixel(char x, char y, unsigned short color)
 
   Write_Data(first_byte);
   Write_Data(second_byte);
+}
+
+unsigned short color_value(char r, char g, char b)
+{
+  char first_byte = 0;
+  char second_byte = 0;
+  
+  first_byte |= (r & 0xf8) << 3;
+  first_byte |= (g & 0x70) >> 5;
+  second_byte |= ((g & 0x1c) >> 2) << 5;
+  second_byte |= (b & 0xf8) >> 3;
+  return ((first_byte << 8) + second_byte);
 }
 
 void draw_num_30_30(char x, char y, char number)
