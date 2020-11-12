@@ -1,5 +1,9 @@
 #include "tiger_128_128_16bit.h"
 #include "tiger_128_96_16bit.h"
+#include "num1_16bit.h"
+#include "num2_16bit.h"
+#include "num3_16bit.h"
+#include "font.h"
 
 #define OLED_CS   4
 #define OLED_RST  3
@@ -12,6 +16,13 @@
 //Mega
 #define OLED_SCK  52
 #define OLED_DATA 51
+
+#define RED    0xf800
+#define GREEN  0x07e0
+#define BLUE   0x001f
+#define WHITE  0xffff
+#define BLACK  0x0000
+#define YELLOW 0xffe0
 
 void setup() {
   //pinMode(10, OUTPUT); // Uno
@@ -199,6 +210,44 @@ void put_pixel(char x, char y, unsigned short color)
 
   Write_Data(first_byte);
   Write_Data(second_byte);
+}
+
+void draw_num_30_30(char x, char y, char number)
+{
+  char column_x =30;
+  char row_y = 30;
+
+  Write_Command(0x15);
+  Write_Data(x);
+  Write_Data(x + column_x - 1);
+
+  Write_Command(0x75);
+  Write_Data(y);
+  Write_Data(y + row_y - 1);
+
+  Write_Command(0x5c);
+
+  for(int j = 0; j < row_y; j++)
+  {
+    for(int i = 0; i < column_x; i++)
+    {
+      if(number == 1)
+      {
+        Write_Data(pgm_read_byte(&num1_16bit[0X46 + 1 + i*2 + j*column_x*2]));
+        Write_Data(pgm_read_byte(&num1_16bit[0X46 + i*2 + j*row_y*2]));
+      }
+      else if(number == 2)
+      {
+        Write_Data(pgm_read_byte(&num2_16bit[0X46 + 1 + i*2 + j*column_x*2]));
+        Write_Data(pgm_read_byte(&num2_16bit[0X46 + i*2 + j*row_y*2]));
+      }
+      else if(number == 3)
+      {
+        Write_Data(pgm_read_byte(&num3_16bit[0X46 + 1 + i*2 + j*column_x*2]));
+        Write_Data(pgm_read_byte(&num3_16bit[0X46 + i*2 + j*row_y*2]));
+      }
+    }
+  }
 }
 
 void draw_bitmap()
