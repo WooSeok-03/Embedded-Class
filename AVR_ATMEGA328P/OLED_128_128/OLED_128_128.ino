@@ -64,7 +64,7 @@ void loop() {
   //draw_num_30_30(50, 50, 3);
   //delay(1000);
 
-   블럭 1개 떨어뜨리기
+  // 블럭 1개 떨어뜨리기
   delete_rect(x, y);
   y+=6;
   make_rect(x, y);
