@@ -61,7 +61,17 @@ void setup() {
   //string_write(10, 100, 0x001f, "Hello");
 
   //make_rect(10, 10);
-  make_block(10, 10);
+  //make_block(10, 10);
+
+  for(int i = 0; i < 21; i++)
+  {
+    draw_line_hori(0, 60, i * 6, color_value(200, 200, 200));
+  }
+
+  for(int i = 0; i < 11; i++)
+  {
+    draw_line_vert(0, 121, i * 6, color_value(200, 200, 200));
+  }
 }
 
 void loop() {
@@ -393,4 +403,14 @@ void delete_block(char x, char y)
       if(block_L[j][i] == 1) delete_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
     }
   }
+}
+
+void draw_line_hori(int x_start, int x_end, int y, unsigned short color)
+{
+  for(int i = x_start; i < x_end - x_start; i++) put_pixel(x_start + i, y, color);
+}
+
+void draw_line_vert(int y_start, int y_end, int x, unsigned short color)
+{
+  for(int i = y_start; i < y_end - y_start; i++) put_pixel(x, y_start + i, color);
 }
