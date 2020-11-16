@@ -25,14 +25,58 @@
 #define BLACK  0x0000
 #define YELLOW 0xffe0
 
-int x = 1;
-int y = 1;
+int x = 3;
+int y = 4;
+char overlapped = 0;
+int rotate = 0;
 
-char block_L[4][4] = { {0,0,0,0},
-                       {0,1,0,0},
-                       {0,1,1,1},
-                       {0,0,0,0}
-};
+char background[22][12] = { {1,1,1,1,1,1,1,1,1,1,1,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,0,0,0,0,0,0,0,0,0,0,1},
+                            {1,1,1,1,1,1,1,1,1,1,1,1} };
+
+//char block_L[4][4] = { {0,0,0,0},
+//                       {0,1,0,0},
+//                       {0,1,1,1},
+//                       {0,0,0,0}
+//};
+
+char block_L[4][4][4] = { 
+                           { {0,0,0,0},
+                             {0,1,0,0},
+                             {0,1,1,1},
+                             {0,0,0,0} },
+                           { {0,0,0,0},
+                             {0,1,1,0},
+                             {0,1,0,0},
+                             {0,1,0,0} },
+                           { {0,0,0,0},
+                             {1,1,1,0},
+                             {0,0,1,0},
+                             {0,0,0,0} },
+                           { {0,1,0,0},
+                             {0,1,0,0},
+                             {0,1,1,0},
+                             {0,0,0,0} } };
+                           
 
 char pixel_offset_x = 1;
 char pixel_offset_y = 1;
@@ -107,9 +151,18 @@ void loop() {
   {
     count = 0;
 
-    delete_block(x,y);
-    y++;
-    make_block(x,y);
+    overlapped = overlap_check(x,y+1);
+    if(overlapped == 0)
+    {
+      delete_block(x,y);
+      y++;
+      make_block(x,y);
+    }
+    else
+    {
+       x = 3;
+       y = 4;
+    }
   }
 
   if(Serial.available())
@@ -117,27 +170,54 @@ void loop() {
     key = Serial.read();
     if(key == 'a')
     {
-      delete_block(x,y);
-      x--;
-      make_block(x,y);
+      overlapped = overlap_check(x-1,y);
+      if(overlapped == 0)
+      {
+        delete_block(x,y);
+        x--;
+        make_block(x,y);
+      }
     }
     else if(key == 'd')
     {
-      delete_block(x,y);
-      x++;
-      make_block(x,y);
+      overlapped = overlap_check(x+1,y);
+      if(overlapped == 0)
+      {
+        delete_block(x,y);
+        x++;
+        make_block(x,y);
+      }
     }
     else if(key == 'w')
     {
-      delete_block(x,y);
-      y--;
-      make_block(x,y);
+      overlapped = overlap_check(x,y-1);
+      if(overlapped == 0)
+      {
+        delete_block(x,y);
+        y--;
+        make_block(x,y);
+      }
     }
     else if(key == 's')
     {
-      delete_block(x,y);
-      y++;
-      make_block(x,y);
+      overlapped = overlap_check(x,y+1);
+      if(overlapped == 0)
+      {
+        delete_block(x,y);
+        y++;
+        make_block(x,y);
+      }
+    }
+    else if(key == 'r')
+    {
+      overlapped = overlap_check_rotate(x, y+1, rotate);
+      if(overlapped == 0)
+      {
+        delete_block(x,y);
+        rotate++;
+        if(rotate == 4) rotate = 0;
+        make_block(x,y);
+      }
     }
   }
 
@@ -442,7 +522,7 @@ void make_block(char x, char y)
   {
     for(int i = 0; i < 4; i++)
     {
-      if(block_L[j][i] == 1) make_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
+      if(block_L[rotate][j][i] == 1) make_rect(pixel_offset_x + (x - 1 + i) * 6,pixel_offset_y + (y - 1 + j) * 6);
     }
   }
 }
@@ -453,7 +533,7 @@ void delete_block(char x, char y)
   {
     for(int i = 0; i < 4; i++)
     {
-      if(block_L[j][i] == 1) delete_rect(pixel_offset_x + (x + i) * 6,pixel_offset_y + (y + j) * 6);
+      if(block_L[rotate][j][i] == 1) delete_rect(pixel_offset_x + (x - 1 + i) * 6,pixel_offset_y + (y - 1 + j) * 6);
     }
   }
 }
@@ -466,4 +546,36 @@ void draw_line_hori(int x_start, int x_end, int y, unsigned short color)
 void draw_line_vert(int y_start, int y_end, int x, unsigned short color)
 {
   for(int i = y_start; i < y_end - y_start; i++) put_pixel(x, y_start + i, color);
+}
+
+char overlap_check(char x, char y)
+{
+  char overlap_count = 0;
+  for(int j = 0; j < 4; j++)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      if(block_L[rotate][j][i] == 1 && background[j+y][i+x] == 1) overlap_count++;
+    }
+  }
+
+  return overlap_count;
+}
+
+char overlap_check_rotate(char x, char y, char rotate)
+{
+  char tmp_rotate = rotate;
+  tmp_rotate++;
+  if(tmp_rotate == 4) tmp_rotate = 0;
+  
+  char overlap_count = 0;
+  for(int j = 0; j < 4; j++)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      if(block_L[tmp_rotate][j][i] == 1 && background[j+y][i+x] == 1) overlap_count++;
+    }
+  }
+
+  return overlap_count;
 }
