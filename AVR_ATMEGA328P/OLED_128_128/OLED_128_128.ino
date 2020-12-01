@@ -160,8 +160,28 @@ void loop() {
     }
     else
     {
-       x = 3;
-       y = 4;
+      insert_block(x, y);
+      //Serial.printf("number of rect = %d\n", line_check(20));
+
+      for(int k = 20; k >= 2; k--)
+      {
+        if(line_check(k))
+        {
+          for(int j = k-1; j >= 1; j--)
+          {
+            for(int i = 0; i < 10; i++)
+            {
+              background[j+1][i+1] = background[j][i+1];
+            }
+          }
+          redraw_background();
+        }
+      }
+      print_background();
+      
+      rotate = 0;
+      x = 3;
+      y = 4;
     }
   }
 
@@ -459,8 +479,8 @@ void draw_bitmap()
     {
       // pgm_byte 에는 포인터만 들어가기 때문에 &를 붙여줌.
       // 128x128
-      Write_Data(pgm_read_byte(&tiger_128_128_16bit[ 1 + i*2 + j*128*2]));
-      Write_Data(pgm_read_byte(&tiger_128_128_16bit[ i*2 + j*128*2]));
+      Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + 1 + i*2 + j*128*2]));
+      Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + i*2 + j*128*2]));
 
       //128x96
       //Write_Data(pgm_read_byte(&tiger_128_128_16bit[0x46 + 1 + i*2 + j*128*2]));
@@ -578,4 +598,60 @@ char overlap_check_rotate(char x, char y, char rotate)
   }
 
   return overlap_count;
+}
+
+void insert_block(char x, char y)
+{
+  for(int j = 0; j < 4; j++)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      if(block_L[rotate][j][i] == 1)
+      {
+        background[j+y][i+x] = 1;
+      }
+    }
+  }
+}
+
+char line_check(char line_num)
+{
+  char line_full = 0;
+  char count = 0;
+
+  for(int i = 0; i < 10; i++)
+    if(background[line_num][i+1] == 1) count++;
+
+
+  if(count == 10) line_full = 1;
+
+  return line_full;
+}
+
+void print_background()
+{
+  Serial.printf("\n");
+  for(int j = 0; j < 22; j++)
+  {
+    for(int i = 0; i < 12; i++)
+    {
+      if(background[j][i] == 1) Serial.printf("1");
+      else Serial.printf("0");
+    }
+    Serial.printf("\n");
+  }
+  Serial.printf("\n");
+}
+
+
+void redraw_background()
+{
+  for(int j = 0; j < 20; j++)
+  {
+    for(int i = 0; i < 10; i++)
+    {
+      if(background[i+1][j+1] == 1) make_rect(pixel_offset_x + (x + 1 + i) * 6,pixel_offset_y + (y + 1 + j) * 6);
+      else delete_rect(pixel_offset_x + (x + 1 + i) * 6,pixel_offset_y + (y + 1 + j) * 6);
+    }
+  }
 }
