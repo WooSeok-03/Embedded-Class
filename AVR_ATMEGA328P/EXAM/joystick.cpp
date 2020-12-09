@@ -5,6 +5,8 @@ void adc_init()
   ADMUX |= 0x40;
   ADCSRA = 0x87;
   ADCSRB = 0x00;
+
+  pinMode(JOY_BUTTON, INPUT_PULLUP);
 }
 
 unsigned short analog_read(char channel)
