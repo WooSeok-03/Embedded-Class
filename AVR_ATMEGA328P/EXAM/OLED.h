@@ -35,6 +35,12 @@ void draw_line_vert(int y_start, int y_end, int x, unsigned short color);
 void delete_rect(char x, char y);
 void make_rect(char x, char y);
 void clear_string();
-
+void draw_mouse_pointer(char x, char y);
+void mouse_pointer_move(char x, char y, char c_choice);
+void draw_save_background(char x, char y);
+int selection_area(char x, char y);
+void draw_selection_click(int select);
+void delete_selection_click();
+void main_menu();
 
 #endif
