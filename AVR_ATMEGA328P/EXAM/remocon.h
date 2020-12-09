@@ -5,5 +5,6 @@
 
 void remoconInit();
 char getRemoconNum();
+int remocon_menu_control();
 
 #endif

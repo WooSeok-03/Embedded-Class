@@ -5,7 +5,8 @@ unsigned long int_time[40] = {0,};
 int remocon_diff_time[33] = { 0, };
 char remocon_bit[32];
 char remocon_num = 0x00;
-char rem_8bit_data[10][8] = {
+int remocon_finish_flag = 0;
+char rem_8bit_data[21][8] = {
   {0, 1, 1, 0, 1, 0, 0, 0}, // 0
   {0, 0, 1, 1, 0, 0, 0, 0}, // 1
   {0, 0, 0, 1, 1, 0, 0, 0}, // 2
@@ -16,17 +17,38 @@ char rem_8bit_data[10][8] = {
   {0, 1, 0, 0, 0, 0, 1, 0}, // 7
   {0, 1, 0, 0, 1, 0, 1, 0}, // 8
   {0, 1, 0, 1, 0, 0, 1, 0}, // 9
+  {1, 0, 0, 1, 1, 0, 0, 0}, // 100+
+  {1, 0, 1, 1, 0, 0, 0, 0}, // 200+
+  {1, 1, 1, 0, 0, 0, 0, 0}, // -
+  {1, 0, 1, 0, 1, 0, 0, 0}, // +
+  {1, 0, 0, 1, 0, 0, 0, 0}, // EQ
+  {0, 0, 1, 0, 0, 0, 1, 0}, // PREV
+  {0, 0, 0, 0, 0, 0, 1, 0}, // NEXT
+  {1, 1, 0, 0, 0, 0, 1, 0}, // PLAY/PAUSE
+  {1, 0, 1, 0, 0, 0, 1, 0}, // CH-
+  {0, 1, 1, 0, 0, 0, 1, 0}, // CH
+  {1, 1, 1, 0, 0, 0, 1, 0} // CH+
 };
 
+int menu_control = 0;
+int menu_toggle = 0;
+
 char getRemoconNum() {
+  Serial.println(remocon_num - 0x30);
   return remocon_num;
 }
 
 void remoconInit() {
   DDRE &= ~0x20;
-  
+
   EICRB |= 0x08;
   EIMSK |= 0x20;
+}
+
+int remocon_menu_control()
+{
+  //Serial.println(menu_control);
+  return menu_control;
 }
 
 SIGNAL(INT5_vect) {
@@ -45,6 +67,7 @@ SIGNAL(INT5_vect) {
   }
 
   rem_int_count++;
+  menu_control = 0;
 
   if (rem_int_count == 34) {
     rem_int_count = 0;
@@ -60,17 +83,16 @@ SIGNAL(INT5_vect) {
     }
     remocon_num = 0x00;
 
-    for (int j = 0; j < 10; j++)
+    for (int j = 0; j < 21; j++)
     {
       int count = 0;
       for (int i = 0; i < 8; i++) {
-        if (remocon_bit[16 + i] == rem_8bit_data[j][i]) {
-          count++;
-        }
+        if (remocon_bit[16 + i] == rem_8bit_data[j][i]) count++;
       }
       if (count == 8) {
         remocon_num = j + 0x30;
         //Serial.println(remocon_num);
+        menu_control = j;
         break;
       }
     }
