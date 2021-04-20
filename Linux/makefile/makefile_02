@@ -1,0 +1,18 @@
+CC=gcc
+CFLAGS=-W -Wall
+TARGET=PLAY
+
+$(TARGET) : add.o mul.o play.o
+	$(CC) $(CFLAGS) -o $(TARGET) add.o mul.o play.o
+
+add.o : add.c
+	$(CC) $(CFLAGS) -c -o add.o add.c
+
+mul.o : mul.c
+	$(CC) $(CFLAGS) -c -o mul.o mul.c
+
+play.o : play.c
+	$(CC) $(CFLAGS) -c -o play.o play.c
+
+clean :
+	rm *.o $(TARGET)

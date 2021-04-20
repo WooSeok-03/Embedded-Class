@@ -1,0 +1,16 @@
+PLAY : add.o mul.o play.o
+	gcc -o PLAY add.o mul.o play.o
+
+add.o : add.c
+	gcc -c -o add.o add.c
+
+mul.o : mul.c
+	gcc -c -o mul.o mul.c
+
+play.o : play.c
+	gcc -c -o play.o play.c
+
+clean :
+	rm *.o PLAY
+
+
