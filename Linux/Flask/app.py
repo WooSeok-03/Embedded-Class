@@ -8,7 +8,7 @@ import time
 # __name__ => python file name
 app = Flask(__name__)
 
-# LED Settings
+# LED & Ultrasonic Settings
 LED = 17
 TRIG = 19
 ECHO = 26
@@ -18,22 +18,25 @@ GPIO.setup(LED, GPIO.OUT)    # Pin 동작모드 설정 - Output ( LED )
 GPIO.setup(TRIG, GPIO.OUT)    # Pin 동작모드 설정 - Input ( TRIG )
 GPIO.setup(ECHO, GPIO.IN)     # Pin 동작모드 설정 - Output ( ECHO )
 
-# http://localhost:5000/
+# http://localhost:5000/  ----------------------------------------------
 @app.route("/")
 def helloworld():
     # 반드시 return에 결과가 들어가야함.
     return "Hello World!"
     
+# http://localhost:5000/led/on -----------------------------------------
 @app.route("/led/on")
 def led_on():
     GPIO.output(LED, GPIO.HIGH)  # LED ON
     return "LED : ON"
     
+# http://localhost:5000/led/off ----------------------------------------
 @app.route("/led/off")
 def led_off():
     GPIO.output(LED, GPIO.LOW)   # LED OFF
     return "LED : OFF"
 
+# http://localhost:5000/ultrasonic -------------------------------------
 @app.route("/ultrasonic")
 def ultrasonic():
     GPIO.output(TRIG, GPIO.LOW)
