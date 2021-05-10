@@ -1,18 +1,11 @@
 #-*- coding:utf-8 -*-
 # 모듈 로딩 ------------------------
 from flask import Flask, render_template
-import RPi.GPIO as GPIO
-import time
 
 # Flask 객체 생성
 # __name__ => python file name
 app = Flask(__name__)
 
-# LED Settings
-LED = 17
-
-GPIO.setmode(GPIO.BCM)      # Pin 명명법 - BCM
-GPIO.setup(LED, GPIO.OUT)    # Pin 동작모드 설정 - Output ( LED )
 
 # http://localhost:5000/ -----------------------------------------------
 @app.route("/")
@@ -33,5 +26,4 @@ def hello_user(user):
 if __name__ == '__main__':
     # Flask Server Run
     app.run(host="0.0.0.0")
-    GPIO.cleanup()  # Pin 사용 헤제 
     exit(0)
