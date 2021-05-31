@@ -1,7 +1,11 @@
-임베디드 소프트웨어개발과
+👨‍💻 임베디드 소프트웨어개발과
 =
-임베디드 시스템 수업에서 배운 내용
+✍ 임베디드 시스템 수업에서 배운 내용
 -
+### Register
+* 컴퓨터의 프로세서 내에서 자료를 보관하는 아주 빠른 기억 장소
+* 일반적으로 현재 계산을 수행중인 값을 저장하는 데 사용
+
 ### GPIO
 * 다용도 입출력(general-purpose input/output) : 입력이나 출력을 포함한 동작이 런타임 시에 사용자에 의해 제어될 수 있는, 집적 회로나 전기 회로 기판의 디지털 신호 핀
 * ( 즉, 입력이나 출력같은 동작이 실행 시에 사용자에 의해 제어 될 수 있는 디지털 신호 핀 ) 
@@ -57,47 +61,27 @@
 
 ## 수업에서 사용했던 모듈
 
-### LED
-
-### Button
-
-### Active Buzzer
-
-### Passive Buzzer
-
-### Servo Motor
-* PWM을 구현할 때 많이 사용
-
-### DC Motor
-
-### Step Motor
-
-### Joy Stick
-
-### Ultrasonic Sensor (초음파 센서)
-
-### Photo Resistor (조도 센서)
-
-### charLCD (16x2)
-
-### LCD (128x64)
-
-### OLED (128x128)
-* SPI 사용
-
-### Bluetooth
-* 수업에서 사용한 모듈 : HC-06 / HC-05
-
-### WIFI
-* 수업에 사용한 모듈 : esp8266
-
+* LED
+* Button
+* Active Buzzer
+* Passive Buzzer
+* Servo Motor - PWM을 구현할 때 많이 사용
+* DC Motor
+* Step Motor
+* Joy Stick
+* Ultrasonic Sensor (초음파 센서)
+* Photo Resistor (조도 센서)
+* charLCD (16x2)
+* LCD (128x64)
+* OLED (128x128) - SPI 사용
+* Bluetooth (수업에서 사용한 모듈 : HC-06 / HC-05)
+* WIFI (수업에 사용한 모듈 : esp8266)
 
 리눅스 수업에서 배운 내용
 -
-### 라이브러리
+#### 라이브러리
 * 정적 라이브러리
 * 공유 라이브러리
-
-### make & makefile
-
-### Toolchain
+#### make & makefile
+#### Toolchain
+#### Shell Script
